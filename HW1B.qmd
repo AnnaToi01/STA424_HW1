@@ -9,46 +9,43 @@ editor: visual
 
 ## Downloading and Importing Libraries
 
+Here I list the needed packages. Then the packages are downloaded in case they are absent or imported directly.
+
 ```{r message=FALSE}
 packages <- c("ggplot2", "ggeasy")
 package.check <- lapply(
   packages,
   FUN = function(x) {
-    if (!require(x, character.only = TRUE)) {
-      install.packages(x, dependencies = TRUE)
-      library(x, character.only = TRUE)
+    if (!require(x, character.only=TRUE)) {
+      install.packages(x, dependencies=TRUE)
+      library(x, character.only=TRUE)
     }
   }
 )
 ```
 
-## Importing Libraries
-
-```{r}
-library(ggplot2)
-```
-
 ## Sampling
 
-Sampling 100 values from log-normal distribution.
+Sampling 100 values from log-normal distribution with mu=5 and sigma=0.5.
 
 ```{r}
 set.seed(42)
-lognorm_distr <- rlnorm(100, meanlog = 5, sdlog = 0.5)
+lognorm_distr <- rlnorm(100, meanlog=5, sdlog=0.5)
 ```
 
-## Visualization
-
-Creating a dataframe with a column *value* - the vector of the sampled values from the log-norm distribution and its log.
+Creating a dataframe with a column *value* - the vector of the sampled values from the log-norm distribution, and with *log_value* - log.
 
 ```{r}
 data <- data.frame(value=lognorm_distr, log_value=log(lognorm_distr))
 ```
+
 ### Reporting mean and standard deviation
 
 The mean of the values is `r round(mean(lognorm_distr), digits=3)` and the standard deviation is `r round(sd(lognorm_distr), digits=3)`.
 
 The mean of the log of the values is `r round(mean(data$log_value), digits=3)` and the standard deviation is `r round(sd(data$log_value), digits=3)`.
+
+## Visualization
 
 ### Linear scale
 
