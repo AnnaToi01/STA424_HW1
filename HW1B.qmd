@@ -1,0 +1,100 @@
+---
+title: "HW1B"
+author: "Anna Toidze"
+format: html
+editor: visual
+---
+
+# Exercise 1 Part B
+
+## Downloading and Importing Libraries
+
+```{r message=FALSE}
+packages <- c("ggplot2", "ggeasy")
+package.check <- lapply(
+  packages,
+  FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  }
+)
+```
+
+## Importing Libraries
+
+```{r}
+library(ggplot2)
+```
+
+## Sampling
+
+Sampling 100 values from log-normal distribution.
+
+```{r}
+set.seed(42)
+lognorm_distr <- rlnorm(100, meanlog = 5, sdlog = 0.5)
+```
+
+## Visualization
+
+Creating a dataframe with a column *value* - the vector of the sampled values from the log-norm distribution and its log.
+
+```{r}
+data <- data.frame(value=lognorm_distr, log_value=log(lognorm_distr))
+```
+### Reporting mean and standard deviation
+
+The mean of the values is `r round(mean(lognorm_distr), digits=3)` and the standard deviation is `r round(sd(lognorm_distr), digits=3)`.
+
+The mean of the log of the values is `r round(mean(data$log_value), digits=3)` and the standard deviation is `r round(sd(data$log_value), digits=3)`.
+
+### Linear scale
+
+Plotting the values on a histogram on the linear scale.
+
+```{r}
+linhist <- ggplot(data = data, aes(x = value)) +
+  geom_histogram(binwidth=10, fill="#800080", color="white", alpha=0.9) + 
+  labs(x = 'Sampled Value', y = 'Count', title = 'Histogram, linear scale of 100 random values\nfrom log-normal distribution') +
+  theme_light() 
+linhist
+```
+
+### Log scale
+
+Plotting the values on a histogram on the log scale.
+
+```{r}
+loghist <- ggplot(data = data, aes(x = log_value)) +
+  geom_histogram(binwidth=0.1, fill="#800080", color="white", alpha=0.9) + 
+  labs(x = 'Log(Sampled Value)', y = 'Count', 
+       title = 'Histogram, log scale of 100 random values\nfrom log-normal distribution') +
+  theme_light()
+loghist
+```
+
+### Violin Plot
+
+Visualizing violin plots on linear and log scales.
+
+#### Linear
+
+```{r}
+ggplot(data, aes(y=value, x=""))+
+  geom_violin(fill="#800080", color="white", alpha=0.9) +
+  labs(x = '', y = 'Count', 
+       title = 'Violin Plot of 100 random values\nfrom log-normal distribution') +
+  theme_light()
+```
+
+#### Log
+
+```{r}
+ggplot(data, aes(y=value, x=""))+
+   geom_violin(fill="#800080", color="white", alpha=0.9) +
+   labs(x = '', y = 'Value', 
+        title = 'Violin Plot of 100 random values\nfrom log-normal distribution') +
+   theme_light()
+```
